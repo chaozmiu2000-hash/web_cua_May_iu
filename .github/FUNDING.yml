@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💗 Trái Tim Đập 3D - Thủ khoa Lý</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+            perspective: 1000px;
+        }
+
+        /* Mode 1: Trái tim đập */
+        .heart {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: heartbeat 1.2s ease-in-out infinite;
+        }
+
+        .heart svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.6));
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.15);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        /* Mode 2: Trái tim xoay 3D */
+        .heart-3d {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate3d 4s linear infinite;
+        }
+
+        @keyframes rotate3d {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+            }
+        }
+
+        .heart-3d svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 30px rgba(255, 105, 180, 0.8));
+        }
+
+        /* Mode 3: Trái tim nhịp + ánh sáng */
+        .heart-pulse {
+            position: relative;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glow-pulse 1.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(255, 105, 180, 0.6);
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+
+        /* Nút chuyển đổi mode */
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid white;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        button.active {
+            background: rgba(255, 255, 255, 0.8);
+            color: #764ba2;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .title {
+            color: white;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-top: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hiệu ứng hạt bay */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.8), transparent);
+            border-radius: 50%;
+            animation: float 3s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) opacity(1);
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) opacity(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .heart-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .mode-selector {
+                gap: 10px;
+            }
+
+            button {
+                padding: 10px 18px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <h1 class="title">💗 Trái Tim Đập 3D</h1>
+        <p class="subtitle">Lấy cảm hứng từ trào lưu "Code trái tim của Thủ khoa Lý"</p>
+
+        <div class="heart-container">
+            <div class="glow"></div>
+            <div class="heart heart-pulse" id="heart">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 95 C20 80, 5 65, 5 45 C5 30, 15 20, 25 20 C35 20, 45 30, 50 40 C55 30, 65 20, 75 20 C85 20, 95 30, 95 45 C95 65, 80 80, 50 95 Z" 
+                          fill="url(#heartGradient)" stroke="#ff1493" stroke-width="1.5"/>
+                    <defs>
+                        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff69b4;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff1493;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+
+        <div class="mode-selector">
+            <button class="active" onclick="setMode('heartbeat')">💗 Trái Tim Đập</button>
+            <button onclick="setMode('rotate3d')">🔄 Xoay 3D</button>
+            <button onclick="setMode('pulse')">✨ Nhịp + Ánh Sáng</button>
+        </div>
+    </div>
+
+    <script>
+        // Tạo hiệu ứng hạt bay
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                const tx = (Math.random() - 0.5) * 200;
+                const ty = (Math.random() - 0.5) * 200 - 100;
+                const duration = 3 + Math.random() * 2;
+
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.setProperty('--x', tx + 'px');
+                particle.style.setProperty('--y', ty + 'px');
+                particle.style.animation = `float ${duration}s infinite`;
+                particle.style.animationDelay = Math.random() * 2 + 's';
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Chuyển đổi mode
+        function setMode(mode) {
+            const heart = document.getElementById('heart');
+            const buttons = document.querySelectorAll('.mode-selector button');
+
+            // Cập nhật nút active
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Xóa tất cả các class hiệu ứng
+            heart.classList.remove('heart', 'heart-pulse', 'heart-3d');
+
+            // Thêm class mới
+            if (mode === 'heartbeat') {
+                heart.classList.add('heart-pulse');
+            } else if (mode === 'rotate3d') {
+                heart.classList.add('heart-3d');
+            } else if (mode === 'pulse') {
+                heart.classList.add('heart-pulse');
+            }
+        }
+
+        // Khởi tạo hạt bay khi tải trang
+        window.addEventListener('load', createParticles);
+    </script>
+</body>
+</html>
+
