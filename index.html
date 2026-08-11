@@ -1,721 +1,1331 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>3D Heart - I Love You</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>❤️ 3D Love Heart</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+*{box-sizing:border-box}
 
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #02030a;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+}
 
-    #app {
-      position: fixed;
-      inset: 0;
-    }
+body{
+  font-family:Arial,sans-serif;
+}
 
-    canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-    }
+#scene{
+  position:fixed;
+  inset:0;
+}
 
-    .panel {
-      position: fixed;
-      z-index: 10;
-      top: 18px;
-      left: 18px;
-      width: min(330px, calc(100vw - 36px));
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 18px;
-      background: rgba(8, 10, 24, .72);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      color: white;
-      box-shadow: 0 15px 50px rgba(0,0,0,.35);
-    }
+canvas{
+  display:block;
+  width:100%;
+  height:100%;
+  touch-action:none;
+}
 
-    .panel h1 {
-      margin: 0 0 12px;
-      font-size: 18px;
-      font-weight: 700;
-    }
+/* BẢNG ĐIỀU KHIỂN */
+#panel{
+  position:fixed;
+  z-index:20;
+  left:18px;
+  top:18px;
+  width:310px;
+  padding:16px;
+  border-radius:18px;
+  color:#fff;
+  background:rgba(8,8,18,.72);
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:0 15px 50px rgba(0,0,0,.5);
+}
 
-    .row {
-      margin-top: 11px;
-    }
+#panel h2{
+  margin:0 0 12px;
+  font-size:19px;
+}
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 12px;
-      opacity: .8;
-    }
+label{
+  display:block;
+  font-size:12px;
+  opacity:.8;
+  margin:10px 0 5px;
+}
 
-    input[type="text"] {
-      width: 100%;
-      border: 1px solid rgba(255,255,255,.2);
-      outline: none;
-      border-radius: 10px;
-      padding: 10px 11px;
-      color: white;
-      background: rgba(255,255,255,.08);
-    }
+input[type=text]{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ffffff25;
+  outline:0;
+  background:#ffffff12;
+  color:white;
+}
 
-    input[type="range"] {
-      width: 100%;
-      accent-color: #ff3c91;
-    }
+input[type=range]{
+  width:100%;
+  accent-color:#ff2775;
+}
 
-    .buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 12px;
-    }
+.row{
+  display:flex;
+  gap:8px;
+}
 
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 10px;
-      cursor: pointer;
-      color: white;
-      background: rgba(255,255,255,.12);
-      transition: .2s;
-    }
+button{
+  flex:1;
+  padding:10px;
+  border:0;
+  border-radius:10px;
+  color:#fff;
+  background:#ffffff18;
+  cursor:pointer;
+}
 
-    button:hover {
-      background: rgba(255,255,255,.22);
-      transform: translateY(-1px);
-    }
+button:hover{
+  background:#ffffff30;
+}
 
-    .color-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+input[type=color]{
+  width:50px;
+  height:34px;
+  border:0;
+  background:none;
+}
 
-    input[type="color"] {
-      width: 44px;
-      height: 34px;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      cursor: pointer;
-    }
+.small{
+  font-size:11px;
+  opacity:.55;
+  line-height:1.4;
+  margin-top:11px;
+}
 
-    .hint {
-      margin-top: 12px;
-      font-size: 11px;
-      line-height: 1.45;
-      opacity: .55;
-    }
+#loading{
+  position:fixed;
+  inset:0;
+  z-index:30;
+  display:grid;
+  place-items:center;
+  background:#000;
+  color:#fff;
+  font-size:16px;
+}
 
-    .title {
-      position: fixed;
-      z-index: 5;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      text-align: center;
-      color: rgba(255,255,255,.92);
-      text-shadow:
-        0 0 8px rgba(255,50,130,.7),
-        0 0 25px rgba(255,50,130,.45);
-      font-size: clamp(18px, 4vw, 34px);
-      font-weight: 800;
-      opacity: .82;
-    }
+.hidden{
+  display:none!important;
+}
 
-    @media (max-width: 600px) {
-      .panel {
-        top: 10px;
-        left: 10px;
-        width: min(300px, calc(100vw - 20px));
-        padding: 12px;
-      }
+@media(max-width:600px){
 
-      .hint {
-        display: none;
-      }
-    }
-  </style>
+  #panel{
+    left:10px;
+    top:10px;
+    width:285px;
+    padding:12px;
+  }
+
+  .small{
+    display:none;
+  }
+}
+</style>
 </head>
 
 <body>
-<div id="app"></div>
 
-<div class="panel">
-  <h1>💗 Trái tim 3D</h1>
-
-  <div class="row">
-    <label for="message">Nội dung chữ</label>
-    <input id="message" type="text" value="I LOVE YOU" maxlength="28" />
-  </div>
-
-  <div class="row">
-    <label for="speed">Tốc độ xoay</label>
-    <input id="speed" type="range" min="0" max="2.5" step="0.01" value="0.55" />
-  </div>
-
-  <div class="row">
-    <label for="size">Kích thước chữ</label>
-    <input id="size" type="range" min="0.5" max="2" step="0.01" value="1" />
-  </div>
-
-  <div class="row color-row">
-    <div style="flex:1">
-      <label for="color">Màu chính</label>
-      <input id="color" type="color" value="#ff2d78" />
-    </div>
-    <button id="rainbow">🌈 Cầu vồng</button>
-  </div>
-
-  <div class="buttons">
-    <button id="toggle">⏸ Tự xoay</button>
-    <button id="reset">↻ Đặt lại</button>
-  </div>
-
-  <div class="hint">
-    Kéo chuột / vuốt màn hình để xoay 3D.<br>
-    Cuộn chuột / pinch để zoom. Chữ sẽ chạy quanh trái tim.
-  </div>
+<div id="loading">
+  Đang tạo trái tim 3D... ❤️
 </div>
 
-<div class="title" id="centerTitle">I LOVE YOU</div>
+<div id="scene"></div>
+
+<!-- BẢNG ĐIỀU KHIỂN -->
+<div id="panel">
+
+  <h2>❤️ 3D LOVE</h2>
+
+  <label>Nội dung chữ</label>
+
+  <input
+    id="text"
+    type="text"
+    value="I LOVE YOU"
+    maxlength="30"
+  >
+
+  <label>Tốc độ</label>
+
+  <input
+    id="speed"
+    type="range"
+    min="0"
+    max="2"
+    step=".01"
+    value=".65"
+  >
+
+  <label>Kích thước chữ</label>
+
+  <input
+    id="textSize"
+    type="range"
+    min=".55"
+    max="1.7"
+    step=".01"
+    value="1"
+  >
+
+  <label>Màu trái tim</label>
+
+  <div class="row">
+
+    <input
+      id="color"
+      type="color"
+      value="#ff176f"
+    >
+
+    <button id="rainbow">
+      🌈 Cầu vồng
+    </button>
+
+  </div>
+
+  <div
+    class="row"
+    style="margin-top:10px"
+  >
+
+    <button id="pause">
+      ⏸ Tạm dừng
+    </button>
+
+    <button id="reset">
+      ↻ Reset
+    </button>
+
+  </div>
+
+  <div class="small">
+    Kéo chuột hoặc vuốt màn hình để xoay.
+    Cuộn chuột / pinch để zoom.
+    Chữ 3D bay quanh trái tim và tự đổi màu.
+  </div>
+
+</div>
+
 
 <script type="module">
-  import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js";
-  import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js";
 
-  // ------------------------------------------------------------
-  // CẤU HÌNH
-  // ------------------------------------------------------------
-  const app = document.getElementById("app");
-  const messageInput = document.getElementById("message");
-  const speedInput = document.getElementById("speed");
-  const sizeInput = document.getElementById("size");
-  const colorInput = document.getElementById("color");
-  const rainbowButton = document.getElementById("rainbow");
-  const toggleButton = document.getElementById("toggle");
-  const resetButton = document.getElementById("reset");
-  const centerTitle = document.getElementById("centerTitle");
+import * as THREE from
+"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js";
 
-  let autoRotate = true;
-  let rainbow = true;
-  let hue = 0;
+import {OrbitControls} from
+"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js";
 
-  // ------------------------------------------------------------
-  // SCENE / CAMERA / RENDERER
-  // ------------------------------------------------------------
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x02030a);
-  scene.fog = new THREE.FogExp2(0x02030a, 0.018);
 
-  const camera = new THREE.PerspectiveCamera(
+const $ = id => document.getElementById(id);
+
+let paused = false;
+let rainbow = true;
+let hue = 0;
+let textObjects = [];
+
+
+/* =========================
+   SCENE
+========================= */
+
+const scene = new THREE.Scene();
+
+scene.background =
+  new THREE.Color(0x000005);
+
+scene.fog =
+  new THREE.FogExp2(
+    0x000005,
+    .018
+  );
+
+
+/* =========================
+   CAMERA
+========================= */
+
+const camera =
+  new THREE.PerspectiveCamera(
     45,
     innerWidth / innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.set(0, 0.5, 24);
-
-  const renderer = new THREE.WebGLRenderer({
-    antialias: true,
-    alpha: false
-  });
-
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
-
-  app.appendChild(renderer.domElement);
-
-  // ------------------------------------------------------------
-  // CONTROLS
-  // ------------------------------------------------------------
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.06;
-  controls.enablePan = false;
-  controls.minDistance = 10;
-  controls.maxDistance = 42;
-  controls.autoRotate = false;
-
-  // ------------------------------------------------------------
-  // ÁNH SÁNG
-  // ------------------------------------------------------------
-  const ambient = new THREE.AmbientLight(0xffffff, 1.7);
-  scene.add(ambient);
-
-  const point1 = new THREE.PointLight(0xff2d78, 35, 35);
-  point1.position.set(7, 5, 10);
-  scene.add(point1);
-
-  const point2 = new THREE.PointLight(0x5d6bff, 28, 30);
-  point2.position.set(-8, -4, 6);
-  scene.add(point2);
-
-  // ------------------------------------------------------------
-  // NỀN SAO
-  // ------------------------------------------------------------
-  function createStars() {
-    const count = 1800;
-    const positions = new Float32Array(count * 3);
-
-    for (let i = 0; i < count; i++) {
-      const radius = THREE.MathUtils.randFloat(30, 80);
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(THREE.MathUtils.randFloatSpread(2));
-
-      positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = radius * Math.cos(phi);
-      positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
-    }
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-
-    const material = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.055,
-      transparent: true,
-      opacity: 0.8,
-      depthWrite: false
-    });
-
-    const stars = new THREE.Points(geometry, material);
-    scene.add(stars);
-
-    return stars;
-  }
-
-  const stars = createStars();
-
-  // ------------------------------------------------------------
-  // TẠO HÌNH TRÁI TIM 3D
-  // ------------------------------------------------------------
-  function heartPoint(t, scale = 1) {
-    const x = 16 * Math.pow(Math.sin(t), 3);
-    const y =
-      13 * Math.cos(t)
-      - 5 * Math.cos(2 * t)
-      - 2 * Math.cos(3 * t)
-      - Math.cos(4 * t);
-
-    return new THREE.Vector2(
-      x * 0.27 * scale,
-      y * 0.27 * scale
-    );
-  }
-
-  const heartShape = new THREE.Shape();
-  const samples = 220;
-
-  for (let i = 0; i <= samples; i++) {
-    const t = (i / samples) * Math.PI * 2;
-    const p = heartPoint(t, 1);
-
-    if (i === 0) heartShape.moveTo(p.x, p.y);
-    else heartShape.lineTo(p.x, p.y);
-  }
-
-  const heartGeometry = new THREE.ExtrudeGeometry(heartShape, {
-    depth: 1.7,
-    bevelEnabled: true,
-    bevelSegments: 5,
-    steps: 3,
-    bevelSize: 0.16,
-    bevelThickness: 0.16,
-    curveSegments: 32
-  });
-
-  heartGeometry.center();
-
-  const heartMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xff2d78,
-    emissive: 0xff164f,
-    emissiveIntensity: 1.5,
-    roughness: 0.22,
-    metalness: 0.15,
-    clearcoat: 1,
-    clearcoatRoughness: 0.12,
-    transparent: true,
-    opacity: 0.96
-  });
-
-  const heart = new THREE.Mesh(heartGeometry, heartMaterial);
-  heart.rotation.x = 0;
-  heart.rotation.y = 0;
-  scene.add(heart);
-
-  // ------------------------------------------------------------
-  // HÀO QUANG TRÁI TIM
-  // ------------------------------------------------------------
-  const glowGeometry = new THREE.SphereGeometry(4.8, 48, 48);
-
-  const glowMaterial = new THREE.MeshBasicMaterial({
-    color: 0xff2d78,
-    transparent: true,
-    opacity: 0.075,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false
-  });
-
-  const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-  glow.scale.set(1.25, 0.95, 0.5);
-  scene.add(glow);
-
-  // ------------------------------------------------------------
-  // HẠT SÁNG BAO QUANH TRÁI TIM
-  // ------------------------------------------------------------
-  const particleCount = 2500;
-  const particlePositions = new Float32Array(particleCount * 3);
-  const particleColors = new Float32Array(particleCount * 3);
-
-  const particleGeometry = new THREE.BufferGeometry();
-  const particleMaterial = new THREE.PointsMaterial({
-    size: 0.045,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.95,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false
-  });
-
-  const heartParticles = new THREE.Points(
-    particleGeometry,
-    particleMaterial
+    .1,
+    200
   );
 
-  scene.add(heartParticles);
+camera.position.set(
+  0,
+  0,
+  25
+);
 
-  function updateHeartParticles() {
-    for (let i = 0; i < particleCount; i++) {
-      const t = Math.random() * Math.PI * 2;
-      const p = heartPoint(t, 1);
 
-      const fill = Math.sqrt(Math.random());
+/* =========================
+   RENDERER
+========================= */
 
-      const x = p.x * fill;
-      const y = p.y * fill;
-      const z = THREE.MathUtils.randFloatSpread(1.6) * (0.35 + fill);
+const renderer =
+  new THREE.WebGLRenderer({
+    antialias:true
+  });
 
-      particlePositions[i * 3] = x + THREE.MathUtils.randFloatSpread(0.08);
-      particlePositions[i * 3 + 1] = y + THREE.MathUtils.randFloatSpread(0.08);
-      particlePositions[i * 3 + 2] = z;
+renderer.setPixelRatio(
+  Math.min(devicePixelRatio,2)
+);
 
-      const c = new THREE.Color();
+renderer.setSize(
+  innerWidth,
+  innerHeight
+);
 
-      if (rainbow) {
-        c.setHSL((hue + i / particleCount * 0.7) % 1, 0.9, 0.62);
-      } else {
-        c.set(colorInput.value);
-      }
+renderer.outputColorSpace =
+  THREE.SRGBColorSpace;
 
-      particleColors[i * 3] = c.r;
-      particleColors[i * 3 + 1] = c.g;
-      particleColors[i * 3 + 2] = c.b;
-    }
+renderer.toneMapping =
+  THREE.ACESFilmicToneMapping;
 
-    particleGeometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(particlePositions, 3)
+renderer.toneMappingExposure =
+  1.25;
+
+$("scene").appendChild(
+  renderer.domElement
+);
+
+
+/* =========================
+   CAMERA CONTROL
+========================= */
+
+const controls =
+  new OrbitControls(
+    camera,
+    renderer.domElement
+  );
+
+controls.enableDamping = true;
+
+controls.dampingFactor = .06;
+
+controls.enablePan = false;
+
+controls.minDistance = 11;
+
+controls.maxDistance = 45;
+
+
+/* =========================
+   LIGHT
+========================= */
+
+scene.add(
+  new THREE.AmbientLight(
+    0xffffff,
+    1.8
+  )
+);
+
+
+const lightA =
+  new THREE.PointLight(
+    0xff2277,
+    45,
+    35
+  );
+
+lightA.position.set(
+  8,
+  5,
+  10
+);
+
+scene.add(lightA);
+
+
+const lightB =
+  new THREE.PointLight(
+    0x5555ff,
+    35,
+    35
+  );
+
+lightB.position.set(
+  -8,
+  -5,
+  8
+);
+
+scene.add(lightB);
+
+
+/* =========================
+   STARS
+========================= */
+
+const starCount = 1800;
+
+const starPos =
+  new Float32Array(
+    starCount * 3
+  );
+
+for(
+  let i=0;
+  i<starCount;
+  i++
+){
+
+  const r =
+    THREE.MathUtils.randFloat(
+      28,
+      75
     );
 
-    particleGeometry.setAttribute(
-      "color",
-      new THREE.BufferAttribute(particleColors, 3)
+  const a =
+    Math.random() *
+    Math.PI * 2;
+
+  const z =
+    THREE.MathUtils.randFloatSpread(2);
+
+  const s =
+    Math.sqrt(
+      1-z*z
+    );
+
+  starPos[i*3] =
+    r*s*Math.cos(a);
+
+  starPos[i*3+1] =
+    r*z;
+
+  starPos[i*3+2] =
+    r*s*Math.sin(a);
+}
+
+
+const starGeo =
+  new THREE.BufferGeometry();
+
+starGeo.setAttribute(
+  "position",
+  new THREE.BufferAttribute(
+    starPos,
+    3
+  )
+);
+
+
+const stars =
+  new THREE.Points(
+    starGeo,
+    new THREE.PointsMaterial({
+      color:0xffffff,
+      size:.045,
+      transparent:true,
+      opacity:.8
+    })
+  );
+
+scene.add(stars);
+
+
+/* =========================
+   HEART FORMULA
+========================= */
+
+function heart(
+  t,
+  scale=1
+){
+
+  const x =
+    16 *
+    Math.sin(t) ** 3;
+
+  const y =
+    13*Math.cos(t)
+    -5*Math.cos(2*t)
+    -2*Math.cos(3*t)
+    -Math.cos(4*t);
+
+  return {
+    x:x*.27*scale,
+    y:y*.27*scale
+  };
+}
+
+
+/* =========================
+   CREATE HEART
+========================= */
+
+const heartShape =
+  new THREE.Shape();
+
+const N = 240;
+
+for(
+  let i=0;
+  i<=N;
+  i++
+){
+
+  const p =
+    heart(
+      i/N *
+      Math.PI * 2
+    );
+
+  if(i===0){
+
+    heartShape.moveTo(
+      p.x,
+      p.y
+    );
+
+  }else{
+
+    heartShape.lineTo(
+      p.x,
+      p.y
     );
   }
+}
 
-  updateHeartParticles();
 
-  // ------------------------------------------------------------
-  // TEXT SPRITES
-  // ------------------------------------------------------------
-  const textGroup = new THREE.Group();
-  scene.add(textGroup);
-
-  const textSprites = [];
-
-  function makeTextTexture(text, color, scale = 1) {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    const fontSize = Math.round(72 * scale);
-    canvas.width = 1024;
-    canvas.height = 180;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.font = `900 ${fontSize}px Arial`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    // Glow
-    ctx.shadowColor = color;
-    ctx.shadowBlur = 28;
-
-    ctx.fillStyle = color;
-    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
-
-    // Highlight
-    ctx.shadowBlur = 0;
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = "rgba(255,255,255,.35)";
-    ctx.strokeText(text, canvas.width / 2, canvas.height / 2);
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.needsUpdate = true;
-
-    return texture;
-  }
-
-  function rebuildText() {
-    while (textGroup.children.length) {
-      const child = textGroup.children.pop();
-
-      if (child.material) {
-        if (child.material.map) child.material.map.dispose();
-        child.material.dispose();
-      }
-
-      child.geometry?.dispose?.();
+const heartGeo =
+  new THREE.ExtrudeGeometry(
+    heartShape,
+    {
+      depth:1.65,
+      bevelEnabled:true,
+      bevelSegments:5,
+      steps:3,
+      bevelSize:.14,
+      bevelThickness:.14
     }
+  );
 
-    textSprites.length = 0;
+heartGeo.center();
 
-    const text = messageInput.value.trim() || "I LOVE YOU";
-    const count = 18;
-    const size = Number(sizeInput.value);
 
-    for (let i = 0; i < count; i++) {
-      const angle = (i / count) * Math.PI * 2;
+/* =========================
+   HEART MATERIAL
+========================= */
 
-      let color;
-      if (rainbow) {
-        const c = new THREE.Color();
-        c.setHSL((i / count + hue) % 1, 0.92, 0.64);
-        color = "#" + c.getHexString();
-      } else {
-        color = colorInput.value;
-      }
+const heartMat =
+  new THREE.MeshPhysicalMaterial({
 
-      const texture = makeTextTexture(text, color, size);
+    color:0xff176f,
 
-      const material = new THREE.SpriteMaterial({
-        map: texture,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      });
+    emissive:0xff064c,
 
-      const sprite = new THREE.Sprite(material);
+    emissiveIntensity:1.8,
 
-      const radiusX = 7.2;
-      const radiusY = 4.4;
-      const radiusZ = 3.0;
+    roughness:.2,
 
-      sprite.position.set(
-        Math.cos(angle) * radiusX,
-        Math.sin(angle) * radiusY,
-        Math.sin(angle * 2) * radiusZ
+    metalness:.12,
+
+    clearcoat:1,
+
+    clearcoatRoughness:.1
+
+  });
+
+
+const heartMesh =
+  new THREE.Mesh(
+    heartGeo,
+    heartMat
+  );
+
+scene.add(heartMesh);
+
+
+/* =========================
+   HEART GLOW
+========================= */
+
+const glow =
+  new THREE.Mesh(
+
+    new THREE.SphereGeometry(
+      4.8,
+      40,
+      40
+    ),
+
+    new THREE.MeshBasicMaterial({
+
+      color:0xff176f,
+
+      transparent:true,
+
+      opacity:.065,
+
+      blending:
+        THREE.AdditiveBlending,
+
+      depthWrite:false
+
+    })
+
+  );
+
+
+glow.scale.set(
+  1.2,
+  .95,
+  .55
+);
+
+scene.add(glow);
+
+
+/* =========================
+   HEART PARTICLES
+========================= */
+
+const particleCount = 1400;
+
+const pp =
+  new Float32Array(
+    particleCount * 3
+  );
+
+
+for(
+  let i=0;
+  i<particleCount;
+  i++
+){
+
+  const t =
+    Math.random() *
+    Math.PI * 2;
+
+  const p =
+    heart(t,1);
+
+  const jitter =
+    THREE.MathUtils.randFloatSpread(.13);
+
+  pp[i*3] =
+    p.x + jitter;
+
+  pp[i*3+1] =
+    p.y + jitter;
+
+  pp[i*3+2] =
+    THREE.MathUtils.randFloatSpread(1.8);
+}
+
+
+const pg =
+  new THREE.BufferGeometry();
+
+pg.setAttribute(
+  "position",
+  new THREE.BufferAttribute(
+    pp,
+    3
+  )
+);
+
+
+const particles =
+  new THREE.Points(
+
+    pg,
+
+    new THREE.PointsMaterial({
+
+      color:0xff9fca,
+
+      size:.055,
+
+      transparent:true,
+
+      opacity:.9,
+
+      blending:
+        THREE.AdditiveBlending
+
+    })
+
+  );
+
+scene.add(particles);
+
+
+/* =========================
+   ORBIT RINGS
+========================= */
+
+const orbitGroup =
+  new THREE.Group();
+
+scene.add(
+  orbitGroup
+);
+
+
+for(
+  let i=0;
+  i<3;
+  i++
+){
+
+  const torus =
+    new THREE.Mesh(
+
+      new THREE.TorusGeometry(
+        6.7+i*.55,
+        .025,
+        8,
+        180
+      ),
+
+      new THREE.MeshBasicMaterial({
+
+        color:
+          i===1
+          ? 0x6c63ff
+          : 0xff3b87,
+
+        transparent:true,
+
+        opacity:.22,
+
+        blending:
+          THREE.AdditiveBlending
+
+      })
+
+    );
+
+  torus.rotation.x =
+    Math.PI/2 + i*.3;
+
+  torus.rotation.z =
+    i*.7;
+
+  orbitGroup.add(torus);
+}
+
+
+/* =========================
+   TEXTURE FOR 3D TEXT
+========================= */
+
+function makeTexture(
+  text,
+  color,
+  size
+){
+
+  const c =
+    document.createElement(
+      "canvas"
+    );
+
+  c.width = 1024;
+
+  c.height = 180;
+
+  const ctx =
+    c.getContext("2d");
+
+  ctx.clearRect(
+    0,
+    0,
+    c.width,
+    c.height
+  );
+
+  const fs =
+    74 * size;
+
+  ctx.font =
+    `900 ${fs}px Arial`;
+
+  ctx.textAlign =
+    "center";
+
+  ctx.textBaseline =
+    "middle";
+
+  ctx.shadowColor =
+    color;
+
+  ctx.shadowBlur =
+    25;
+
+  ctx.fillStyle =
+    color;
+
+  ctx.fillText(
+    text,
+    512,
+    90
+  );
+
+  ctx.shadowBlur = 0;
+
+  ctx.lineWidth = 3;
+
+  ctx.strokeStyle =
+    "rgba(255,255,255,.35)";
+
+  ctx.strokeText(
+    text,
+    512,
+    90
+  );
+
+  const tex =
+    new THREE.CanvasTexture(c);
+
+  tex.colorSpace =
+    THREE.SRGBColorSpace;
+
+  return tex;
+}
+
+
+/* =========================
+   CREATE TEXT
+========================= */
+
+function rebuildText(){
+
+  textObjects.forEach(o=>{
+
+    if(o.material.map)
+      o.material.map.dispose();
+
+    o.material.dispose();
+
+    scene.remove(o);
+
+  });
+
+  textObjects = [];
+
+
+  const value =
+    $("text").value.trim()
+    || "I LOVE YOU";
+
+  const size =
+    Number(
+      $("textSize").value
+    );
+
+  const count = 20;
+
+
+  for(
+    let i=0;
+    i<count;
+    i++
+  ){
+
+    const a =
+      i/count *
+      Math.PI * 2;
+
+
+    const color =
+      new THREE.Color();
+
+    color.setHSL(
+      (i/count+hue)%1,
+      .95,
+      .65
+    );
+
+
+    const tex =
+      makeTexture(
+        value,
+        "#" +
+        color.getHexString(),
+        size
       );
 
-      const aspect = texture.image.width / texture.image.height;
-      sprite.scale.set(3.9 * size * aspect, 0.72 * size, 1);
 
-      sprite.userData = {
-        angle,
-        index: i,
-        baseY: sprite.position.y
-      };
+    const mat =
+      new THREE.SpriteMaterial({
 
-      textGroup.add(sprite);
-      textSprites.push(sprite);
-    }
-  }
+        map:tex,
 
-  rebuildText();
+        transparent:true,
 
-  // ------------------------------------------------------------
-  // CÁC VÒNG 3D
-  // ------------------------------------------------------------
-  const ringGroup = new THREE.Group();
-  scene.add(ringGroup);
+        depthWrite:false,
 
-  const ringMaterials = [
-    new THREE.MeshBasicMaterial({
-      color: 0xff2d78,
-      transparent: true,
-      opacity: 0.25,
-      side: THREE.DoubleSide
-    }),
-    new THREE.MeshBasicMaterial({
-      color: 0x6c63ff,
-      transparent: true,
-      opacity: 0.18,
-      side: THREE.DoubleSide
-    })
-  ];
+        blending:
+          THREE.AdditiveBlending
 
-  for (let i = 0; i < 4; i++) {
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(
-        6.0 + i * 0.7,
-        0.025,
-        8,
-        160
-      ),
-      ringMaterials[i % ringMaterials.length]
+      });
+
+
+    const s =
+      new THREE.Sprite(mat);
+
+
+    const rx = 7.4;
+
+    const ry = 4.8;
+
+    const rz = 3.1;
+
+
+    s.position.set(
+
+      Math.cos(a)*rx,
+
+      Math.sin(a)*ry,
+
+      Math.sin(a*2)*rz
+
     );
 
-    ring.rotation.x = Math.PI / 2 + i * 0.22;
-    ring.rotation.y = i * 0.55;
-    ringGroup.add(ring);
+
+    s.scale.set(
+
+      4.0*size,
+
+      .72*size,
+
+      1
+
+    );
+
+
+    s.userData = {
+
+      a:a,
+
+      i:i
+
+    };
+
+
+    scene.add(s);
+
+    textObjects.push(s);
+
   }
 
-  // ------------------------------------------------------------
-  // UI
-  // ------------------------------------------------------------
-  messageInput.addEventListener("input", () => {
-    centerTitle.textContent = messageInput.value || "I LOVE YOU";
-    rebuildText();
-  });
+}
 
-  sizeInput.addEventListener("input", rebuildText);
 
-  colorInput.addEventListener("input", () => {
+/* Tạo chữ lần đầu */
+rebuildText();
+
+
+/* =========================
+   COLOR CONTROL
+========================= */
+
+$("text")
+.addEventListener(
+  "input",
+  rebuildText
+);
+
+
+$("textSize")
+.addEventListener(
+  "input",
+  rebuildText
+);
+
+
+$("color")
+.addEventListener(
+  "input",
+  ()=>{
+
     rainbow = false;
-    rainbowButton.textContent = "🌈 Cầu vồng";
-    rebuildText();
-    updateHeartParticles();
-  });
 
-  rainbowButton.addEventListener("click", () => {
+    $("rainbow").textContent =
+      "🌈 Cầu vồng";
+
+    heartMat.color.set(
+      $("color").value
+    );
+
+    heartMat.emissive.set(
+      $("color").value
+    );
+
+    glow.material.color.set(
+      $("color").value
+    );
+
+    particles.material.color.set(
+      $("color").value
+    );
+
+  }
+);
+
+
+/* =========================
+   RAINBOW
+========================= */
+
+$("rainbow")
+.addEventListener(
+  "click",
+  ()=>{
+
     rainbow = !rainbow;
-    rainbowButton.textContent = rainbow
+
+    $("rainbow").textContent =
+      rainbow
       ? "🌈 Cầu vồng: ON"
       : "🌈 Cầu vồng: OFF";
 
-    rebuildText();
-    updateHeartParticles();
-  });
+  }
+);
 
-  toggleButton.addEventListener("click", () => {
-    autoRotate = !autoRotate;
 
-    toggleButton.textContent = autoRotate
-      ? "⏸ Tự xoay"
-      : "▶ Tự xoay";
-  });
+/* =========================
+   PAUSE
+========================= */
 
-  resetButton.addEventListener("click", () => {
-    camera.position.set(0, 0.5, 24);
-    controls.target.set(0, 0, 0);
+$("pause")
+.addEventListener(
+  "click",
+  ()=>{
+
+    paused = !paused;
+
+    $("pause").textContent =
+      paused
+      ? "▶ Tiếp tục"
+      : "⏸ Tạm dừng";
+
+  }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+$("reset")
+.addEventListener(
+  "click",
+  ()=>{
+
+    camera.position.set(
+      0,
+      0,
+      25
+    );
+
+    controls.target.set(
+      0,
+      0,
+      0
+    );
+
     controls.update();
 
-    speedInput.value = 0.55;
-    sizeInput.value = 1;
-    messageInput.value = "I LOVE YOU";
-    centerTitle.textContent = "I LOVE YOU";
+
+    $("text").value =
+      "I LOVE YOU";
+
+    $("speed").value =
+      ".65";
+
+    $("textSize").value =
+      "1";
+
+    $("color").value =
+      "#ff176f";
+
 
     rainbow = true;
-    rainbowButton.textContent = "🌈 Cầu vồng: ON";
+
+    heartMat.color.set(
+      "#ff176f"
+    );
+
+    heartMat.emissive.set(
+      "#ff064c"
+    );
+
+    glow.material.color.set(
+      "#ff176f"
+    );
+
+    particles.material.color.set(
+      "#ff9fca"
+    );
+
+
+    $("rainbow").textContent =
+      "🌈 Cầu vồng: ON";
+
 
     rebuildText();
-    updateHeartParticles();
-  });
 
-  // ------------------------------------------------------------
-  // ANIMATION
-  // ------------------------------------------------------------
-  const clock = new THREE.Clock();
+  }
+);
 
-  function animate() {
-    requestAnimationFrame(animate);
 
-    const time = clock.getElapsedTime();
-    const speed = Number(speedInput.value);
+/* =========================
+   ANIMATION
+========================= */
 
-    hue = (hue + 0.0008) % 1;
+const clock =
+  new THREE.Clock();
 
-    if (autoRotate) {
-      heart.rotation.y += 0.004 * speed;
-      heart.rotation.x = Math.sin(time * 0.65) * 0.08;
 
-      textGroup.rotation.y += 0.0055 * speed;
-      ringGroup.rotation.y -= 0.0025 * speed;
-      ringGroup.rotation.x += 0.0015 * speed;
+function animate(){
+
+  requestAnimationFrame(
+    animate
+  );
+
+
+  const t =
+    clock.getElapsedTime();
+
+
+  const speed =
+    Number(
+      $("speed").value
+    );
+
+
+  if(!paused){
+
+    /* Trái tim xoay */
+
+    heartMesh.rotation.y +=
+      .0045 * speed;
+
+    heartMesh.rotation.x =
+      Math.sin(t*.7)*.07;
+
+
+    /* Vòng tròn */
+
+    orbitGroup.rotation.y -=
+      .0025 * speed;
+
+    orbitGroup.rotation.x +=
+      .001 * speed;
+
+
+    /* Hạt */
+
+    particles.rotation.y +=
+      .002 * speed;
+
+    stars.rotation.y +=
+      .00015;
+
+
+    /* Chữ chạy */
+
+    textObjects.forEach(
+      (s,i)=>{
+
+        s.userData.a +=
+          .0025 * speed;
+
+        const a =
+          s.userData.a;
+
+
+        s.position.x =
+          Math.cos(a)*7.4;
+
+        s.position.y =
+          Math.sin(a)*4.8
+          +
+          Math.sin(
+            t*1.5+i
+          )*.08;
+
+        s.position.z =
+          Math.sin(a*2)*3.1;
+
+
+        s.material.opacity =
+          .7 +
+          .3 *
+          Math.sin(
+            t*2+i
+          );
+
+      }
+    );
+
+
+    /* Nhịp đập */
+
+    const pulse =
+      1 +
+      Math.sin(t*2.6)*.035;
+
+    heartMesh.scale.setScalar(
+      pulse
+    );
+
+
+    glow.scale.x =
+      1.2 +
+      Math.sin(t*2)*.04;
+
+    glow.scale.y =
+      .95 +
+      Math.sin(t*2)*.04;
+
+
+    /* Ánh sáng di chuyển */
+
+    lightA.position.x =
+      Math.sin(t*.7)*9;
+
+    lightA.position.z =
+      Math.cos(t*.7)*9;
+
+
+    lightB.position.x =
+      Math.cos(t*.5)*9;
+
+    lightB.position.z =
+      Math.sin(t*.5)*8;
+
+
+    /* Cầu vồng */
+
+    if(rainbow){
+
+      hue =
+        (hue+.0012)%1;
+
+
+      const c =
+        new THREE.Color();
+
+      c.setHSL(
+        hue,
+        .95,
+        .6
+      );
+
+
+      heartMat.color.copy(c);
+
+      heartMat.emissive
+        .copy(c)
+        .multiplyScalar(.55);
+
+
+      glow.material.color
+        .copy(c);
+
+      particles.material.color
+        .copy(c);
+
+
+      lightA.color.setHSL(
+        hue,
+        .9,
+        .6
+      );
+
+
+      lightB.color.setHSL(
+        (hue+.5)%1,
+        .9,
+        .6
+      );
+
     }
 
-    // Trái tim "thở"
-    const pulse = 1 + Math.sin(time * 2.5) * 0.035;
-    heart.scale.set(pulse, pulse, pulse);
-
-    glow.scale.x = 1.25 + Math.sin(time * 2) * 0.04;
-    glow.scale.y = 0.95 + Math.sin(time * 2) * 0.04;
-
-    // Hạt sáng chuyển động nhẹ
-    heartParticles.rotation.y += 0.0015 * speed;
-    heartParticles.rotation.x = Math.sin(time * 0.4) * 0.06;
-
-    if (rainbow) {
-      updateHeartParticles();
-
-      textSprites.forEach((sprite, i) => {
-        const c = new THREE.Color();
-        c.setHSL((i / textSprites.length + hue) % 1, 0.92, 0.64);
-
-        const canvas = sprite.material.map?.image;
-        // Texture được giữ ổn định; màu rainbow của các sprite được tạo lại
-        // theo chu kỳ để tránh thay đổi quá nặng mỗi frame.
-      });
-    }
-
-    textSprites.forEach((sprite, i) => {
-      const t = time * (0.7 + speed * 0.5) + sprite.userData.index;
-      sprite.position.y =
-        sprite.userData.baseY + Math.sin(t * 1.3) * 0.18;
-    });
-
-    point1.position.x = Math.sin(time * 0.7) * 8;
-    point1.position.z = Math.cos(time * 0.7) * 8;
-
-    point2.position.x = Math.cos(time * 0.5) * 9;
-    point2.position.z = Math.sin(time * 0.5) * 7;
-
-    controls.update();
-    renderer.render(scene, camera);
   }
 
-  // ------------------------------------------------------------
-  // RESIZE
-  // ------------------------------------------------------------
-  addEventListener("resize", () => {
-    camera.aspect = innerWidth / innerHeight;
+
+  controls.update();
+
+  renderer.render(
+    scene,
+    camera
+  );
+
+}
+
+
+/* =========================
+   RESIZE
+========================= */
+
+addEventListener(
+  "resize",
+  ()=>{
+
+    camera.aspect =
+      innerWidth /
+      innerHeight;
+
     camera.updateProjectionMatrix();
 
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  });
+    renderer.setSize(
+      innerWidth,
+      innerHeight
+    );
 
-  animate();
+    renderer.setPixelRatio(
+      Math.min(
+        devicePixelRatio,
+        2
+      )
+    );
+
+  }
+);
+
+
+/* CHẠY */
+
+animate();
+
+
+setTimeout(
+  ()=>
+    $("loading")
+      .classList
+      .add("hidden"),
+  700
+);
+
 </script>
+
 </body>
 </html>
