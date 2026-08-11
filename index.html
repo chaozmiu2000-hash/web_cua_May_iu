@@ -2,249 +2,141 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>❤️ Trái Tim 3D - I Love You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trái Tim 3D</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
 }
 
-html,
-body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: #020208;
-    color: white;
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#020108;
+    font-family:Arial, sans-serif;
 }
 
-#canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    cursor: grab;
+#canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:block;
 }
 
-#canvas:active {
-    cursor: grabbing;
+#panel{
+    position:fixed;
+    left:20px;
+    top:20px;
+    width:280px;
+    padding:20px;
+    border-radius:20px;
+    background:rgba(15,12,30,.88);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 10px 40px rgba(0,0,0,.5);
+    color:white;
+    z-index:10;
 }
 
-/* =========================
-   PANEL ĐIỀU KHIỂN
-========================= */
-
-#panel {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 280px;
-    padding: 18px;
-    border-radius: 18px;
-
-    background: rgba(10, 10, 25, 0.78);
-    border: 1px solid rgba(255,255,255,0.15);
-
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
-    box-shadow:
-        0 10px 40px rgba(0,0,0,0.5),
-        inset 0 0 30px rgba(255,255,255,0.03);
-
-    z-index: 10;
+#panel h2{
+    margin:0 0 18px;
+    text-align:center;
+    font-size:22px;
 }
 
-#panel h2 {
-    text-align: center;
-    margin-bottom: 15px;
-    font-size: 21px;
+label{
+    display:block;
+    margin:12px 0 7px;
+    font-size:14px;
+    font-weight:bold;
 }
 
-.control {
-    margin-bottom: 13px;
+input[type="text"],
+select{
+    width:100%;
+    padding:11px;
+    border-radius:10px;
+    border:1px solid #555;
+    background:#211f2b;
+    color:white;
+    outline:none;
 }
 
-.control label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    color: #ddd;
+input[type="range"]{
+    width:100%;
+    accent-color:#ff238c;
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 10px 12px;
-
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 10px;
-
-    outline: none;
-    background: rgba(255,255,255,0.08);
-    color: white;
-
-    font-size: 14px;
+.buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:15px;
 }
 
-input[type="text"]:focus {
-    border-color: #ff4d8d;
+button{
+    border:0;
+    padding:11px 8px;
+    border-radius:10px;
+    background:linear-gradient(135deg,#ff1685,#9d19ff);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-input[type="range"] {
-    width: 100%;
-    accent-color: #ff3f7f;
+button:hover{
+    transform:scale(1.03);
 }
 
-input[type="color"] {
-    width: 100%;
-    height: 38px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-}
-
-select {
-    width: 100%;
-    padding: 9px;
-
-    color: white;
-    background: #18182a;
-
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 9px;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-button {
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-
-    color: white;
-    background: linear-gradient(135deg, #ff246f, #a21cff);
-
-    font-weight: bold;
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-button:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.15);
-}
-
-button:active {
-    transform: scale(0.97);
-}
-
-#info {
-    margin-top: 13px;
-    text-align: center;
-    color: #aaa;
-    font-size: 11px;
-    line-height: 1.5;
-}
-
-/* =========================
-   TIÊU ĐỀ
-========================= */
-
-#title {
-    position: fixed;
-    top: 18px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    z-index: 5;
-
-    font-size: clamp(18px, 3vw, 30px);
-    font-weight: bold;
-
-    text-align: center;
-
-    pointer-events: none;
-
+#title{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    font-size:28px;
+    font-weight:bold;
     text-shadow:
-        0 0 10px #ff1f70,
-        0 0 25px #ff1f70,
-        0 0 50px #ff1f70;
+        0 0 8px #ff1744,
+        0 0 20px #ff1744,
+        0 0 40px #ff1744;
+    z-index:5;
+    pointer-events:none;
+    white-space:nowrap;
 }
 
-/* =========================
-   HƯỚNG DẪN
-========================= */
-
-#hint {
-    position: fixed;
-    bottom: 18px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    z-index: 5;
-
-    padding: 8px 14px;
-
-    border-radius: 20px;
-
-    background: rgba(0,0,0,0.45);
-
-    color: rgba(255,255,255,0.75);
-
-    font-size: 12px;
-
-    pointer-events: none;
+#hint{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    background:rgba(0,0,0,.5);
+    padding:10px 18px;
+    border-radius:30px;
+    z-index:5;
+    pointer-events:none;
+    font-size:14px;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
-
-    #panel {
-        top: auto;
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-
-        width: auto;
-
-        padding: 12px;
-
-        border-radius: 15px;
+@media(max-width:600px){
+    #panel{
+        width:220px;
+        left:10px;
+        top:10px;
+        padding:14px;
     }
 
-    #panel h2 {
-        display: none;
+    #panel h2{
+        font-size:18px;
     }
 
-    .control {
-        margin-bottom: 8px;
-    }
-
-    #hint {
-        bottom: 205px;
-    }
-
-    #title {
-        top: 10px;
+    #title{
+        font-size:20px;
+        top:10px;
     }
 }
 </style>
@@ -258,1457 +150,829 @@ button:active {
 
 <div id="panel">
 
-    <h2>❤️ Trái Tim 3D</h2>
+<h2>❤️ Trái Tim 3D</h2>
 
-    <div class="control">
-        <label>Nội dung chữ</label>
+<label>Nội dung chữ</label>
+<input id="textInput" type="text" value="I LOVE YOU">
 
-        <input
-            id="textInput"
-            type="text"
-            value="I LOVE YOU"
-            maxlength="30"
-        >
-    </div>
+<label>Màu trái tim</label>
+<select id="colorSelect">
+    <option value="rainbow">🌈 Cầu vồng</option>
+    <option value="red">❤️ Đỏ</option>
+    <option value="pink">💗 Hồng</option>
+    <option value="blue">💙 Xanh</option>
+    <option value="purple">💜 Tím</option>
+    <option value="gold">💛 Vàng</option>
+</select>
 
-    <div class="control">
-        <label>Màu trái tim</label>
+<label>Tốc độ xoay</label>
+<input id="speed" type="range" min="0" max="2" value="0.5" step="0.05">
 
-        <select id="colorMode">
-            <option value="rainbow">🌈 Cầu vồng</option>
-            <option value="pink">💗 Hồng</option>
-            <option value="red">❤️ Đỏ</option>
-            <option value="blue">💙 Xanh</option>
-            <option value="purple">💜 Tím</option>
-            <option value="green">💚 Xanh lá</option>
-            <option value="custom">🎨 Tự chọn</option>
-        </select>
-    </div>
+<label>Kích thước chữ</label>
+<input id="textSize" type="range" min="20" max="100" value="50">
 
-    <div class="control" id="customColorBox" style="display:none;">
-        <label>Chọn màu</label>
-
-        <input
-            id="customColor"
-            type="color"
-            value="#ff2875"
-        >
-    </div>
-
-    <div class="control">
-        <label>Tốc độ xoay</label>
-
-        <input
-            id="speed"
-            type="range"
-            min="0"
-            max="3"
-            step="0.01"
-            value="0.7"
-        >
-    </div>
-
-    <div class="control">
-        <label>Kích thước chữ</label>
-
-        <input
-            id="textSize"
-            type="range"
-            min="10"
-            max="35"
-            step="1"
-            value="20"
-        >
-    </div>
-
-    <div class="buttons">
-
-        <button id="playBtn">
-            ⏸ Dừng
-        </button>
-
-        <button id="heartBtn">
-            💓 Đập tim
-        </button>
-
-    </div>
-
-    <div class="buttons" style="margin-top:8px;">
-
-        <button id="resetBtn">
-            🔄 Reset
-        </button>
-
-        <button id="fullBtn">
-            ⛶ Toàn màn hình
-        </button>
-
-    </div>
-
-    <div id="info">
-        Kéo chuột / ngón tay để xoay<br>
-        Cuộn chuột để phóng to / thu nhỏ
-    </div>
+<div class="buttons">
+    <button id="pause">⏸ Dừng</button>
+    <button id="beat">❤️ Đập tim</button>
+    <button id="reset">🔄 Reset</button>
+    <button id="fullscreen">⛶ Toàn màn hình</button>
+</div>
 
 </div>
 
 <div id="hint">
-    🖱️ Kéo để xoay • 🔍 Cuộn để zoom
+🖱️ Kéo chuột để xoay • 🔍 Cuộn để zoom • 📱 Vuốt trên điện thoại
 </div>
+
+<!-- Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+<!-- OrbitControls -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
 
 <script>
 
-/* =========================================================
-   KHỞI TẠO CANVAS
-========================================================= */
-
 const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
 
-let W = window.innerWidth;
-let H = window.innerHeight;
+const scene = new THREE.Scene();
 
-function resize() {
+scene.background = new THREE.Color(0x020108);
 
-    W = window.innerWidth;
-    H = window.innerHeight;
+const camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    2000
+);
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+camera.position.set(0,0,65);
 
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
+const renderer = new THREE.WebGLRenderer({
+    canvas:canvas,
+    antialias:true,
+    alpha:false
+});
 
-    canvas.style.width = W + "px";
-    canvas.style.height = H + "px";
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
 
-resize();
+/* =========================
+   ĐIỀU KHIỂN XOAY / ZOOM
+========================= */
 
-window.addEventListener("resize", resize);
+const controls = new THREE.OrbitControls(
+    camera,
+    renderer.domElement
+);
 
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
 
-/* =========================================================
-   BIẾN CHÍNH
-========================================================= */
+controls.enableZoom = true;
+controls.zoomSpeed = 1.2;
 
-let rotationY = 0.2;
-let rotationX = -0.1;
+controls.enablePan = false;
 
-let targetRotationY = rotationY;
-let targetRotationX = rotationX;
+controls.rotateSpeed = 0.7;
 
-let zoom = 1;
+/* =========================
+   ÁNH SÁNG
+========================= */
 
-let running = true;
-let heartbeat = true;
+const ambient = new THREE.AmbientLight(
+    0xffffff,
+    1.5
+);
 
-let speed = 0.7;
+scene.add(ambient);
 
-let time = 0;
+const light1 = new THREE.PointLight(
+    0xff1744,
+    5,
+    150
+);
 
+light1.position.set(20,20,30);
 
-/* =========================================================
-   TẠO HẠT TRÁI TIM
-========================================================= */
+scene.add(light1);
 
-const particles = [];
+const light2 = new THREE.PointLight(
+    0x7c4dff,
+    4,
+    150
+);
 
-const PARTICLE_COUNT = 2600;
+light2.position.set(-30,-10,20);
 
-function randomHeartPoint() {
+scene.add(light2);
 
-    let x;
-    let y;
+/* =========================
+   NHÓM TRÁI TIM
+========================= */
+
+const heartGroup = new THREE.Group();
+
+scene.add(heartGroup);
+
+/* =========================
+   TẠO HÌNH TRÁI TIM 3D
+========================= */
+
+const positions = [];
+const colors = [];
+
+const count = 6000;
+
+for(let i=0;i<count;i++){
+
+    const t = Math.random() * Math.PI * 2;
+
+    const scale = Math.sqrt(Math.random());
+
+    let x =
+        16 * Math.pow(Math.sin(t),3);
+
+    let y =
+        13 * Math.cos(t)
+        -5 * Math.cos(2*t)
+        -2 * Math.cos(3*t)
+        -Math.cos(4*t);
+
+    x *= scale;
+    y *= scale;
 
     /*
-       Công thức implicit heart:
-
-       (x² + y² - 1)³ - x²y³ <= 0
-
-       Nó tạo ra hình trái tim khá đẹp.
+       tạo độ dày 3D
     */
 
-    while (true) {
-
-        x = Math.random() * 2.6 - 1.3;
-        y = Math.random() * 2.5 - 1.25;
-
-        const equation =
-            Math.pow(
-                x * x + y * y - 1,
-                3
-            )
-            -
-            x * x * Math.pow(y, 3);
-
-        if (equation <= 0) {
-            break;
-        }
-    }
+    let z =
+        (Math.random()-0.5)
+        * 7
+        * (1-scale*0.55);
 
     /*
-       Tạo độ sâu 3D.
-
-       Các điểm gần trung tâm sẽ có độ sâu lớn hơn.
+       làm trái tim nhỏ vừa màn hình
     */
 
-    const centerDistance =
-        Math.sqrt(
-            x * x +
-            Math.pow(y + 0.15, 2)
-        );
+    x *= 1.15;
+    y *= 1.15;
 
-    const depth =
-        Math.max(
-            0,
-            1 - centerDistance / 1.35
-        );
+    positions.push(x,y,z);
 
-    const z =
-        (Math.random() - 0.5)
-        *
-        depth
-        *
-        1.25;
-
-    return {
-        x,
-        y,
-        z
-    };
-}
-
-
-for (let i = 0; i < PARTICLE_COUNT; i++) {
-
-    const p = randomHeartPoint();
-
-    particles.push({
-
-        x: p.x,
-        y: p.y,
-        z: p.z,
-
-        size:
-            Math.random() * 2.2
-            + 0.6,
-
-        phase:
-            Math.random() * Math.PI * 2,
-
-        brightness:
-            Math.random()
-    });
-}
-
-
-/* =========================================================
-   HẠT BAY XUNG QUANH
-========================================================= */
-
-const stars = [];
-
-for (let i = 0; i < 450; i++) {
-
-    stars.push({
-
-        x:
-            Math.random() * 2 - 1,
-
-        y:
-            Math.random() * 2 - 1,
-
-        z:
-            Math.random() * 2 - 1,
-
-        size:
-            Math.random() * 2 + 0.3,
-
-        phase:
-            Math.random() * Math.PI * 2
-
-    });
-}
-
-
-/* =========================================================
-   HÀM MÀU
-========================================================= */
-
-function hslToRgb(h, s, l) {
-
-    h /= 360;
-
-    let r;
-    let g;
-    let b;
-
-    if (s === 0) {
-
-        r = g = b = l;
-
-    } else {
-
-        const hue2rgb = (p, q, t) => {
-
-            if (t < 0) t += 1;
-            if (t > 1) t -= 1;
-
-            if (t < 1 / 6)
-                return p + (q - p) * 6 * t;
-
-            if (t < 1 / 2)
-                return q;
-
-            if (t < 2 / 3)
-                return p + (q - p) * (2 / 3 - t) * 6;
-
-            return p;
-        };
-
-        const q =
-            l < 0.5
-                ? l * (1 + s)
-                : l + s - l * s;
-
-        const p = 2 * l - q;
-
-        r = hue2rgb(p, q, h + 1 / 3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1 / 3);
-    }
-
-    return [
-        Math.round(r * 255),
-        Math.round(g * 255),
-        Math.round(b * 255)
-    ];
-}
-
-
-function getColor(index, extraHue = 0) {
-
-    const mode =
-        document.getElementById("colorMode").value;
-
-    if (mode === "rainbow") {
-
-        const hue =
-            (index * 0.9 + time * 35 + extraHue)
-            % 360;
-
-        return hslToRgb(
-            hue,
-            0.9,
-            0.6
-        );
-    }
-
-    if (mode === "pink") {
-        return [255, 55, 130];
-    }
-
-    if (mode === "red") {
-        return [255, 40, 55];
-    }
-
-    if (mode === "blue") {
-        return [40, 150, 255];
-    }
-
-    if (mode === "purple") {
-        return [190, 70, 255];
-    }
-
-    if (mode === "green") {
-        return [50, 230, 150];
-    }
-
-    if (mode === "custom") {
-
-        const hex =
-            document.getElementById("customColor").value;
-
-        return hexToRgb(hex);
-    }
-
-    return [255, 50, 100];
-}
-
-
-function hexToRgb(hex) {
-
-    hex = hex.replace("#", "");
-
-    return [
-        parseInt(hex.substring(0, 2), 16),
-        parseInt(hex.substring(2, 4), 16),
-        parseInt(hex.substring(4, 6), 16)
-    ];
-}
-
-
-/* =========================================================
-   3D ROTATION
-========================================================= */
-
-function rotatePoint(p) {
-
-    let x = p.x;
-    let y = p.y;
-    let z = p.z;
-
-    /*
-       X rotation
-    */
-
-    const cosX = Math.cos(rotationX);
-    const sinX = Math.sin(rotationX);
-
-    const y1 =
-        y * cosX -
-        z * sinX;
-
-    const z1 =
-        y * sinX +
-        z * cosX;
-
-    y = y1;
-    z = z1;
-
-    /*
-       Y rotation
-    */
-
-    const cosY = Math.cos(rotationY);
-    const sinY = Math.sin(rotationY);
-
-    const x1 =
-        x * cosY -
-        z * sinY;
-
-    const z2 =
-        x * sinY +
-        z * cosY;
-
-    x = x1;
-    z = z2;
-
-    return {
-        x,
-        y,
-        z
-    };
-}
-
-
-/* =========================================================
-   PROJECTION 3D → 2D
-========================================================= */
-
-function project(p) {
-
-    const camera =
-        4.5 * zoom;
-
-    const perspective =
-        camera /
-        (camera - p.z);
-
-    return {
-
-        x:
-            W / 2 +
-            p.x *
-            260 *
-            perspective,
-
-        y:
-            H / 2 +
-            p.y *
-            260 *
-            perspective,
-
-        scale:
-            perspective,
-
-        depth:
-            p.z
-    };
-}
-
-
-/* =========================================================
-   VẼ NỀN
-========================================================= */
-
-function drawBackground() {
-
-    const gradient =
-        ctx.createRadialGradient(
-            W / 2,
-            H / 2,
-            20,
-            W / 2,
-            H / 2,
-            Math.max(W, H) * 0.75
-        );
-
-    gradient.addColorStop(
-        0,
-        "#130316"
-    );
-
-    gradient.addColorStop(
-        0.45,
-        "#06030b"
-    );
-
-    gradient.addColorStop(
+    colors.push(
         1,
-        "#000000"
-    );
-
-    ctx.fillStyle = gradient;
-
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
+        0.05 + Math.random()*0.25,
+        0.15 + Math.random()*0.5
     );
 }
 
+const heartGeometry =
+    new THREE.BufferGeometry();
 
-/* =========================================================
-   VẼ SAO
-========================================================= */
+heartGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+        positions,
+        3
+    )
+);
 
-function drawStars() {
+heartGeometry.setAttribute(
+    "color",
+    new THREE.Float32BufferAttribute(
+        colors,
+        3
+    )
+);
 
-    for (let i = 0; i < stars.length; i++) {
+const heartMaterial =
+    new THREE.PointsMaterial({
 
-        const s = stars[i];
+        size:0.20,
 
-        const p =
-            rotatePoint({
-                x: s.x * 4,
-                y: s.y * 3,
-                z: s.z * 4
-            });
+        vertexColors:true,
 
-        const projected =
-            project(p);
+        transparent:true,
 
-        const alpha =
-            0.15 +
-            0.35 *
-            (
-                0.5 +
-                0.5 *
-                Math.sin(
-                    time * 2 +
-                    s.phase
-                )
-            );
+        opacity:0.95,
 
-        ctx.beginPath();
+        blending:
+            THREE.AdditiveBlending,
 
-        ctx.fillStyle =
-            `rgba(255,255,255,${alpha})`;
+        depthWrite:false
+    });
 
-        ctx.arc(
-            projected.x,
-            projected.y,
-            s.size *
-            projected.scale,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-    }
-}
-
-
-/* =========================================================
-   VẼ TRÁI TIM
-========================================================= */
-
-function drawHeart() {
-
-    const scaleBeat =
-        heartbeat
-            ? 1 +
-              Math.sin(time * 5) *
-              0.045 *
-              Math.max(
-                  0,
-                  Math.sin(time * 5)
-              )
-            : 1;
-
-    const projectedParticles = [];
-
-    for (
-        let i = 0;
-        i < particles.length;
-        i++
-    ) {
-
-        const p = particles[i];
-
-        const rotated =
-            rotatePoint({
-                x: p.x * scaleBeat,
-                y: p.y * scaleBeat,
-                z: p.z * scaleBeat
-            });
-
-        const screen =
-            project(rotated);
-
-        projectedParticles.push({
-
-            x: screen.x,
-            y: screen.y,
-
-            scale:
-                screen.scale,
-
-            z:
-                screen.depth,
-
-            size:
-                p.size,
-
-            index: i,
-
-            brightness:
-                p.brightness,
-
-            phase:
-                p.phase
-
-        });
-    }
-
-    /*
-       Vẽ từ xa tới gần
-    */
-
-    projectedParticles.sort(
-        (a, b) => a.z - b.z
+const heart =
+    new THREE.Points(
+        heartGeometry,
+        heartMaterial
     );
 
-    /*
-       Glow lớn phía sau
-    */
+heartGroup.add(heart);
 
-    ctx.save();
+/* =========================
+   TRÁI TIM VIỀN NGOÀI
+========================= */
 
-    ctx.globalCompositeOperation =
-        "lighter";
+const outlinePoints = [];
 
-    const glow =
-        ctx.createRadialGradient(
-            W / 2,
-            H / 2,
-            10,
-            W / 2,
-            H / 2,
-            260
-        );
+for(let i=0;i<=400;i++){
 
-    glow.addColorStop(
-        0,
-        "rgba(255,30,110,0.16)"
-    );
+    const t =
+        (i/400)*Math.PI*2;
 
-    glow.addColorStop(
-        0.5,
-        "rgba(255,30,110,0.06)"
-    );
+    const x =
+        16*Math.pow(Math.sin(t),3);
 
-    glow.addColorStop(
-        1,
-        "rgba(255,0,100,0)"
-    );
+    const y =
+        13*Math.cos(t)
+        -5*Math.cos(2*t)
+        -2*Math.cos(3*t)
+        -Math.cos(4*t);
 
-    ctx.fillStyle = glow;
-
-    ctx.fillRect(
-        W / 2 - 300,
-        H / 2 - 300,
-        600,
-        600
-    );
-
-    ctx.restore();
-
-
-    /*
-       Hạt
-    */
-
-    for (
-        let i = 0;
-        i < projectedParticles.length;
-        i++
-    ) {
-
-        const p =
-            projectedParticles[i];
-
-        const rgb =
-            getColor(
-                p.index,
-                p.z * 100
-            );
-
-        const pulse =
-            0.75 +
-            0.25 *
-            Math.sin(
-                time * 3 +
-                p.phase
-            );
-
-        const alpha =
-            0.45 +
-            p.brightness * 0.55;
-
-        const radius =
-            p.size *
-            p.scale *
-            pulse;
-
-        if (radius <= 0)
-            continue;
-
-        ctx.beginPath();
-
-        ctx.fillStyle =
-            `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
-
-        ctx.shadowBlur =
-            8 * p.scale;
-
-        ctx.shadowColor =
-            `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-
-        ctx.arc(
-            p.x,
-            p.y,
-            radius,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-    }
-
-    ctx.shadowBlur = 0;
-}
-
-
-/* =========================================================
-   CHỮ CHẠY VÒNG QUANH TRÁI TIM
-========================================================= */
-
-function drawOrbitText() {
-
-    const input =
-        document.getElementById("textInput");
-
-    let text =
-        input.value.trim();
-
-    if (!text) {
-        text = "I LOVE YOU";
-    }
-
-    const size =
-        Number(
-            document.getElementById("textSize").value
-        );
-
-    /*
-       Nhiều ký tự được lặp lại
-       tạo thành vòng chữ
-    */
-
-    const repeated =
-        (
-            text +
-            "   ❤️   " +
-            text +
-            "   ❤️   "
-        );
-
-    const chars =
-        repeated.split("");
-
-    const radiusX =
-        1.65;
-
-    const radiusY =
-        0.85;
-
-    const radiusZ =
-        1.15;
-
-    const total =
-        chars.length;
-
-    /*
-       Chữ quay theo thời gian
-    */
-
-    const offset =
-        time *
-        speed *
-        0.9;
-
-    const textObjects = [];
-
-    for (
-        let i = 0;
-        i < total;
-        i++
-    ) {
-
-        const angle =
-            (i / total) *
-            Math.PI *
-            2 +
-            offset;
-
-        const p = {
-
-            x:
-                Math.cos(angle) *
-                radiusX,
-
-            y:
-                Math.sin(angle) *
-                radiusY,
-
-            z:
-                Math.sin(angle) *
-                radiusZ
-
-        };
-
-        const rotated =
-            rotatePoint(p);
-
-        const screen =
-            project(rotated);
-
-        textObjects.push({
-
-            char: chars[i],
-
-            x: screen.x,
-
-            y: screen.y,
-
-            scale: screen.scale,
-
-            z: screen.depth,
-
-            angle: angle
-
-        });
-    }
-
-    textObjects.sort(
-        (a, b) => a.z - b.z
-    );
-
-
-    for (
-        let i = 0;
-        i < textObjects.length;
-        i++
-    ) {
-
-        const obj =
-            textObjects[i];
-
-        const rgb =
-            getColor(
-                i,
-                120
-            );
-
-        const alpha =
-            0.35 +
-            (
-                (obj.z + 1) / 2
-            ) *
-            0.65;
-
-        const fontSize =
-            size *
-            obj.scale;
-
-        ctx.save();
-
-        ctx.translate(
-            obj.x,
-            obj.y
-        );
-
-        /*
-           Chữ nghiêng theo quỹ đạo
-        */
-
-        ctx.rotate(
-            Math.atan2(
-                Math.cos(obj.angle),
-                -Math.sin(obj.angle)
-            )
-        );
-
-        ctx.font =
-            `bold ${Math.max(8,fontSize)}px Arial`;
-
-        ctx.textAlign =
-            "center";
-
-        ctx.textBaseline =
-            "middle";
-
-        ctx.fillStyle =
-            `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
-
-        ctx.shadowColor =
-            `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-
-        ctx.shadowBlur =
-            12 * obj.scale;
-
-        ctx.fillText(
-            obj.char,
-            0,
+    outlinePoints.push(
+        new THREE.Vector3(
+            x*1.17,
+            y*1.17,
             0
-        );
-
-        ctx.restore();
-    }
+        )
+    );
 }
 
+const outlineGeometry =
+    new THREE.BufferGeometry()
+    .setFromPoints(outlinePoints);
 
-/* =========================================================
-   TRÁI TIM LỚN Ở GIỮA
-========================================================= */
+const outlineMaterial =
+    new THREE.LineBasicMaterial({
+        color:0xff1744,
+        transparent:true,
+        opacity:0.8
+    });
 
-function drawCenterHeart() {
-
-    const beat =
-        heartbeat
-            ? 1 +
-              Math.sin(time * 5) * 0.04
-            : 1;
-
-    const size =
-        25 * beat;
-
-    ctx.save();
-
-    ctx.translate(
-        W / 2,
-        H / 2
+const outline =
+    new THREE.LineLoop(
+        outlineGeometry,
+        outlineMaterial
     );
 
-    ctx.scale(
-        size,
-        size
+heartGroup.add(outline);
+
+/* =========================
+   TẠO CHỮ 3D CHẠY XUNG QUANH
+========================= */
+
+let textSprites = [];
+
+let currentText = "I LOVE YOU";
+
+function createTextSprite(text){
+
+    const c =
+        document.createElement("canvas");
+
+    c.width = 512;
+    c.height = 128;
+
+    const ctx =
+        c.getContext("2d");
+
+    ctx.clearRect(
+        0,0,
+        c.width,
+        c.height
     );
 
-    ctx.beginPath();
+    ctx.font =
+        "bold 55px Arial";
 
-    /*
-       Hình trái tim SVG-like
-    */
+    ctx.textAlign =
+        "center";
 
-    ctx.moveTo(
-        0,
-        0.8
-    );
-
-    ctx.bezierCurveTo(
-        -2.0,
-        -0.5,
-        -1.2,
-        -2.0,
-        0,
-        -1.0
-    );
-
-    ctx.bezierCurveTo(
-        1.2,
-        -2.0,
-        2.0,
-        -0.5,
-        0,
-        0.8
-    );
-
-    const rgb =
-        getColor(
-            500,
-            0
-        );
-
-    ctx.fillStyle =
-        `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.8)`;
+    ctx.textBaseline =
+        "middle";
 
     ctx.shadowColor =
-        `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+        "#ff1744";
 
-    ctx.shadowBlur = 20;
+    ctx.shadowBlur =
+        25;
 
-    ctx.fill();
+    ctx.fillStyle =
+        "#ffffff";
 
-    ctx.restore();
+    ctx.fillText(
+        text,
+        c.width/2,
+        c.height/2
+    );
+
+    const texture =
+        new THREE.CanvasTexture(c);
+
+    texture.needsUpdate = true;
+
+    const material =
+        new THREE.SpriteMaterial({
+
+            map:texture,
+
+            transparent:true,
+
+            depthWrite:false
+        });
+
+    const sprite =
+        new THREE.Sprite(material);
+
+    sprite.scale.set(
+        13,
+        3.3,
+        1
+    );
+
+    return sprite;
 }
 
+/* =========================
+   TẠO NHIỀU CHỮ
+========================= */
 
-/* =========================================================
-   ANIMATION
-========================================================= */
+function buildTexts(){
 
-let lastTime =
-    performance.now();
+    textSprites.forEach(s=>{
+        heartGroup.remove(s);
 
-function animate(now) {
+        if(s.material.map){
+            s.material.map.dispose();
+        }
 
-    const delta =
-        Math.min(
-            0.05,
-            (now - lastTime) / 1000
-        );
+        s.material.dispose();
+    });
 
-    lastTime = now;
+    textSprites=[];
 
-    if (running) {
+    for(let i=0;i<12;i++){
 
-        time += delta;
+        const sprite =
+            createTextSprite(
+                currentText
+            );
 
-        /*
-           Tự động xoay
-        */
+        sprite.userData.angle =
+            (i/12)*Math.PI*2;
 
-        targetRotationY +=
-            speed *
-            delta *
-            0.35;
+        textSprites.push(sprite);
 
-        rotationY +=
-            (targetRotationY - rotationY)
-            * 0.08;
-
-        rotationX +=
-            (targetRotationX - rotationX)
-            * 0.08;
+        heartGroup.add(sprite);
     }
-
-    drawBackground();
-
-    drawStars();
-
-    drawHeart();
-
-    drawOrbitText();
-
-    /*
-       Không vẽ center heart quá lớn
-       để vẫn thấy hiệu ứng 3D
-    */
-
-    requestAnimationFrame(animate);
 }
 
-requestAnimationFrame(animate);
+buildTexts();
 
+/* =========================
+   SAO NỀN
+========================= */
 
-/* =========================================================
-   ĐIỀU KHIỂN CHUỘT
-========================================================= */
+const starPositions = [];
 
-let dragging = false;
+for(let i=0;i<1800;i++){
 
-let lastMouseX = 0;
-let lastMouseY = 0;
+    starPositions.push(
+        (Math.random()-0.5)*300,
+        (Math.random()-0.5)*200,
+        (Math.random()-0.5)*150
+    );
+}
 
-canvas.addEventListener(
-    "mousedown",
-    e => {
+const starGeometry =
+    new THREE.BufferGeometry();
 
-        dragging = true;
-
-        lastMouseX =
-            e.clientX;
-
-        lastMouseY =
-            e.clientY;
-    }
+starGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(
+        starPositions,
+        3
+    )
 );
 
+const starMaterial =
+    new THREE.PointsMaterial({
 
-window.addEventListener(
-    "mouseup",
-    () => {
+        color:0xffffff,
 
-        dragging = false;
-    }
-);
+        size:0.12,
 
+        transparent:true,
 
-window.addEventListener(
-    "mousemove",
-    e => {
+        opacity:0.7
+    });
 
-        if (!dragging)
-            return;
-
-        const dx =
-            e.clientX -
-            lastMouseX;
-
-        const dy =
-            e.clientY -
-            lastMouseY;
-
-        targetRotationY +=
-            dx * 0.008;
-
-        targetRotationX +=
-            dy * 0.008;
-
-        targetRotationX =
-            Math.max(
-                -1.5,
-                Math.min(
-                    1.5,
-                    targetRotationX
-                )
-            );
-
-        lastMouseX =
-            e.clientX;
-
-        lastMouseY =
-            e.clientY;
-    }
-);
-
-
-/* =========================================================
-   ZOOM
-========================================================= */
-
-canvas.addEventListener(
-    "wheel",
-    e => {
-
-        e.preventDefault();
-
-        zoom +=
-            e.deltaY * 0.001;
-
-        zoom =
-            Math.max(
-                0.55,
-                Math.min(
-                    1.8,
-                    zoom
-                )
-            );
-
-    },
-    {
-        passive: false
-    }
-);
-
-
-/* =========================================================
-   ĐIỆN THOẠI / TOUCH
-========================================================= */
-
-let touchX = 0;
-let touchY = 0;
-
-canvas.addEventListener(
-    "touchstart",
-    e => {
-
-        if (
-            e.touches.length !== 1
-        ) {
-            return;
-        }
-
-        touchX =
-            e.touches[0].clientX;
-
-        touchY =
-            e.touches[0].clientY;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-canvas.addEventListener(
-    "touchmove",
-    e => {
-
-        if (
-            e.touches.length !== 1
-        ) {
-            return;
-        }
-
-        e.preventDefault();
-
-        const x =
-            e.touches[0].clientX;
-
-        const y =
-            e.touches[0].clientY;
-
-        const dx =
-            x - touchX;
-
-        const dy =
-            y - touchY;
-
-        targetRotationY +=
-            dx * 0.01;
-
-        targetRotationX +=
-            dy * 0.01;
-
-        targetRotationX =
-            Math.max(
-                -1.5,
-                Math.min(
-                    1.5,
-                    targetRotationX
-                )
-            );
-
-        touchX = x;
-        touchY = y;
-
-    },
-    {
-        passive: false
-    }
-);
-
-
-/* =========================================================
-   NÚT CHẠY / DỪNG
-========================================================= */
-
-const playBtn =
-    document.getElementById("playBtn");
-
-playBtn.addEventListener(
-    "click",
-    () => {
-
-        running = !running;
-
-        playBtn.textContent =
-            running
-                ? "⏸ Dừng"
-                : "▶ Chạy";
-    }
-);
-
-
-/* =========================================================
-   NÚT ĐẬP TIM
-========================================================= */
-
-const heartBtn =
-    document.getElementById("heartBtn");
-
-heartBtn.addEventListener(
-    "click",
-    () => {
-
-        heartbeat =
-            !heartbeat;
-
-        heartBtn.textContent =
-            heartbeat
-                ? "💓 Đập tim"
-                : "💗 Tim tĩnh";
-    }
-);
-
-
-/* =========================================================
-   TỐC ĐỘ
-========================================================= */
-
-document
-    .getElementById("speed")
-    .addEventListener(
-        "input",
-        e => {
-
-            speed =
-                Number(e.target.value);
-        }
+const stars =
+    new THREE.Points(
+        starGeometry,
+        starMaterial
     );
 
+scene.add(stars);
 
-/* =========================================================
-   MÀU
-========================================================= */
+/* =========================
+   THIẾT LẬP
+========================= */
 
-const colorMode =
-    document.getElementById("colorMode");
+let speed = 0.5;
 
-const customColorBox =
-    document.getElementById("customColorBox");
+let paused = false;
 
-colorMode.addEventListener(
-    "change",
-    () => {
+let beat = false;
 
-        customColorBox.style.display =
-            colorMode.value === "custom"
-                ? "block"
-                : "none";
-    }
-);
+let beatTime = 0;
 
+let textSize = 50;
 
-/* =========================================================
-   RESET
-========================================================= */
+/* =========================
+   INPUT CHỮ
+========================= */
 
 document
-    .getElementById("resetBtn")
-    .addEventListener(
-        "click",
-        () => {
-
-            rotationY = 0.2;
-
-            rotationX = -0.1;
-
-            targetRotationY = 0.2;
-
-            targetRotationX = -0.1;
-
-            zoom = 1;
-
-            speed = 0.7;
-
-            document
-                .getElementById("speed")
-                .value = "0.7";
-
-            document
-                .getElementById("textSize")
-                .value = "20";
-
-            document
-                .getElementById("textInput")
-                .value = "I LOVE YOU";
-
-            colorMode.value =
-                "rainbow";
-
-            customColorBox.style.display =
-                "none";
-
-            running = true;
-
-            heartbeat = true;
-
-            playBtn.textContent =
-                "⏸ Dừng";
-
-            heartBtn.textContent =
-                "💓 Đập tim";
-        }
-    );
-
-
-/* =========================================================
-   TOÀN MÀN HÌNH
-========================================================= */
-
-document
-    .getElementById("fullBtn")
-    .addEventListener(
-        "click",
-        async () => {
-
-            try {
-
-                if (!document.fullscreenElement) {
-
-                    await document
-                        .documentElement
-                        .requestFullscreen();
-
-                } else {
-
-                    await document
-                        .exitFullscreen();
-
-                }
-
-            } catch (error) {
-
-                console.log(
-                    "Fullscreen không khả dụng:",
-                    error
-                );
-
-            }
-        }
-    );
-
-
-/* =========================================================
-   HIỆU ỨNG KHI NHẬP CHỮ
-========================================================= */
-
-const textInput =
-    document.getElementById("textInput");
-
-const title =
-    document.getElementById("title");
-
-textInput.addEventListener(
+.getElementById("textInput")
+.addEventListener(
     "input",
-    () => {
+    function(){
+
+        currentText =
+            this.value ||
+            "I LOVE YOU";
+
+        document
+        .getElementById("title")
+        .textContent =
+            "❤️ " +
+            currentText +
+            " ❤️";
+
+        buildTexts();
+    }
+);
+
+/* =========================
+   TỐC ĐỘ
+========================= */
+
+document
+.getElementById("speed")
+.addEventListener(
+    "input",
+    function(){
+
+        speed =
+            Number(this.value);
+    }
+);
+
+/* =========================
+   KÍCH THƯỚC CHỮ
+========================= */
+
+document
+.getElementById("textSize")
+.addEventListener(
+    "input",
+    function(){
+
+        textSize =
+            Number(this.value);
+
+        textSprites.forEach(
+            sprite=>{
+
+                const scale =
+                    textSize/50;
+
+                sprite.scale.set(
+                    13*scale,
+                    3.3*scale,
+                    1
+                );
+            }
+        );
+    }
+);
+
+/* =========================
+   ĐỔI MÀU
+========================= */
+
+document
+.getElementById("colorSelect")
+.addEventListener(
+    "change",
+    function(){
 
         const value =
-            textInput.value.trim();
+            this.value;
 
-        title.textContent =
-            value
-                ? "❤️ " + value + " ❤️"
-                : "❤️ yeu gia dien  ❤️";
+        if(value==="red"){
+            heartMaterial.color
+                .set(0xff1744);
+        }
+
+        if(value==="pink"){
+            heartMaterial.color
+                .set(0xff1493);
+        }
+
+        if(value==="blue"){
+            heartMaterial.color
+                .set(0x2196ff);
+        }
+
+        if(value==="purple"){
+            heartMaterial.color
+                .set(0xb000ff);
+        }
+
+        if(value==="gold"){
+            heartMaterial.color
+                .set(0xffd600);
+        }
+
+        if(value==="rainbow"){
+            heartMaterial
+                .vertexColors = true;
+
+            heartMaterial
+                .needsUpdate = true;
+        }
+    }
+);
+
+/* =========================
+   NÚT DỪNG
+========================= */
+
+document
+.getElementById("pause")
+.addEventListener(
+    "click",
+    function(){
+
+        paused = !paused;
+
+        this.textContent =
+            paused
+            ? "▶ Chạy"
+            : "⏸ Dừng";
+    }
+);
+
+/* =========================
+   NÚT ĐẬP TIM
+========================= */
+
+document
+.getElementById("beat")
+.addEventListener(
+    "click",
+    function(){
+
+        beat = true;
+
+        beatTime = 0;
+    }
+);
+
+/* =========================
+   RESET
+========================= */
+
+document
+.getElementById("reset")
+.addEventListener(
+    "click",
+    function(){
+
+        camera.position.set(
+            0,
+            0,
+            65
+        );
+
+        controls.target.set(
+            0,
+            0,
+            0
+        );
+
+        heartGroup.rotation.set(
+            0,
+            0,
+            0
+        );
+
+        speed=0.5;
+
+        document
+        .getElementById("speed")
+        .value=0.5;
+    }
+);
+
+/* =========================
+   TOÀN MÀN HÌNH
+========================= */
+
+document
+.getElementById("fullscreen")
+.addEventListener(
+    "click",
+    function(){
+
+        if(!document.fullscreenElement){
+
+            document
+            .documentElement
+            .requestFullscreen();
+
+        }else{
+
+            document.exitFullscreen();
+        }
+    }
+);
+
+/* =========================
+   ANIMATION
+========================= */
+
+const clock =
+    new THREE.Clock();
+
+function animate(){
+
+    requestAnimationFrame(animate);
+
+    const delta =
+        clock.getDelta();
+
+    if(!paused){
+
+        /*
+           tự xoay trái tim
+        */
+
+        heartGroup.rotation.y
+            += speed*delta;
+
+        heartGroup.rotation.z
+            += speed*0.08*delta;
+
+        /*
+           chữ chạy quanh trái tim
+        */
+
+        textSprites.forEach(
+            (sprite,index)=>{
+
+                const angle =
+                    sprite.userData.angle
+                    + performance.now()*0.0005;
+
+                const radius = 29;
+
+                sprite.position.x =
+                    Math.cos(angle)*radius;
+
+                sprite.position.y =
+                    Math.sin(angle)*radius*0.55;
+
+                sprite.position.z =
+                    Math.sin(angle)*10;
+
+                /*
+                   chữ luôn hướng về camera
+                */
+
+                sprite.lookAt(
+                    camera.position
+                );
+            }
+        );
+
+        /*
+           hiệu ứng cầu vồng
+        */
+
+        if(
+            document
+            .getElementById("colorSelect")
+            .value === "rainbow"
+        ){
+
+            const time =
+                performance.now()*0.001;
+
+            const arr =
+                heartGeometry
+                .attributes
+                .color
+                .array;
+
+            for(
+                let i=0;
+                i<arr.length;
+                i+=3
+            ){
+
+                const hue =
+                    (time+i*0.00005)%1;
+
+                const color =
+                    new THREE.Color();
+
+                color.setHSL(
+                    hue,
+                    1,
+                    0.55
+                );
+
+                arr[i]=color.r;
+                arr[i+1]=color.g;
+                arr[i+2]=color.b;
+            }
+
+            heartGeometry
+            .attributes
+            .color
+            .needsUpdate=true;
+        }
+    }
+
+    /*
+       hiệu ứng đập tim
+    */
+
+    if(beat){
+
+        beatTime += delta;
+
+        const pulse =
+            1 +
+            Math.sin(
+                beatTime*18
+            )*0.10*
+            Math.max(
+                0,
+                1-beatTime
+            );
+
+        heartGroup.scale.set(
+            pulse,
+            pulse,
+            pulse
+        );
+
+        if(beatTime>1){
+            beat=false;
+
+            heartGroup.scale.set(
+                1,1,1
+            );
+        }
+    }
+
+    controls.update();
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+animate();
+
+/* =========================
+   RESIZE
+========================= */
+
+window.addEventListener(
+    "resize",
+    function(){
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
     }
 );
 
